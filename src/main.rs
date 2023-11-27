@@ -21,7 +21,7 @@ use uf2::{
 };
 use zerocopy::AsBytes;
 
-use crate::address_range::{MAIN_RAM_END, XIP_SRAM_END, XIP_SRAM_START};
+use crate::address_range::{MAIN_RAM_END};
 
 mod address_range;
 mod elf;
@@ -97,26 +97,21 @@ fn elf2uf2(mut input: impl Read + Seek, mut output: impl Write) -> Result<(), Bo
 
     if ram_style {
         let mut expected_ep_main_ram = u32::MAX;
-        let mut expected_ep_xip_sram = u32::MAX;
 
         #[allow(clippy::manual_range_contains)]
         pages.keys().copied().for_each(|addr| {
             if addr >= MAIN_RAM_START && addr <= MAIN_RAM_END {
                 expected_ep_main_ram = expected_ep_main_ram.min(addr) | 0x1;
-            } else if addr >= XIP_SRAM_START && addr < XIP_SRAM_END {
-                expected_ep_xip_sram = expected_ep_xip_sram.min(addr) | 0x1;
-            }
+            } 
         });
 
         let expected_ep = if expected_ep_main_ram != u32::MAX {
             expected_ep_main_ram
         } else {
-            expected_ep_xip_sram
+            panic!("I don't know what to do here");
         };
 
-        if expected_ep == expected_ep_xip_sram {
-            return Err("B0/B1 Boot ROM does not support direct entry into XIP_SRAM".into());
-        } else if eh.entry != expected_ep {
+        if eh.entry != expected_ep {
             #[allow(clippy::unnecessary_cast)]
             return Err(format!(
                 "A RAM binary should have an entry point at the beginning: {:#08x} (not {:#08x})",
