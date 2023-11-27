@@ -76,9 +76,9 @@ impl Elf32Header {
         if eh.common.abi != 0 {
             return Err("Unrecognized ABI".into());
         }
-        if eh.flags & EF_ARM_ABI_FLOAT_HARD > 0 {
-            return Err("HARD-FLOAT not supported".into());
-        }
+        // if eh.flags & EF_ARM_ABI_FLOAT_HARD > 0 {
+        //     return Err("HARD-FLOAT not supported".into());
+        // }
 
         Ok(eh)
     }
