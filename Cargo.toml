@@ -13,6 +13,7 @@ repository = "https://github.com/JoNil/elf2uf2-rs"
 [dependencies]
 assert_into = "1.1"
 clap = { version = "4", features = ["derive"] }
+clap-num = "1.1.1"
 once_cell = "1.5"
 pbr = "1"
 serialport = { version = "4", optional = true }

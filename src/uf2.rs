@@ -13,7 +13,11 @@ pub const UF2_FLAG_FILE_CONTAINER: u32 = 0x00001000;
 pub const UF2_FLAG_FAMILY_ID_PRESENT: u32 = 0x00002000;
 pub const UF2_FLAG_MD5_PRESENT: u32 = 0x00004000;
 
-pub const RP2040_FAMILY_ID: u32 = 0xADA52840;
+// right
+//pub const RP2040_FAMILY_ID: u32 = 0x9808B007;
+
+// left
+//pub const RP2040_FAMILY_ID: u32 = 0x9807B007;
 
 #[repr(packed)]
 #[derive(AsBytes, FromBytes, FromZeroes)]

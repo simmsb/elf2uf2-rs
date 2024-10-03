@@ -16,7 +16,7 @@ use std::{
 };
 use sysinfo::{DiskExt, SystemExt};
 use uf2::{
-    Uf2BlockData, Uf2BlockFooter, Uf2BlockHeader, RP2040_FAMILY_ID, UF2_FLAG_FAMILY_ID_PRESENT,
+    Uf2BlockData, Uf2BlockFooter, Uf2BlockHeader, UF2_FLAG_FAMILY_ID_PRESENT,
     UF2_MAGIC_END, UF2_MAGIC_START0, UF2_MAGIC_START1,
 };
 use zerocopy::AsBytes;
@@ -45,6 +45,10 @@ struct Opts {
 
     /// Input file
     input: String,
+
+    /// Family ID
+    #[clap(short, long, value_parser = clap_num::maybe_hex::<u32>)]
+    family_id: u32,
 
     /// Output file
     output: Option<String>,
@@ -155,7 +159,7 @@ fn elf2uf2(mut input: impl Read + Seek, mut output: impl Write) -> Result<(), Bo
         payload_size: PAGE_SIZE,
         block_no: 0,
         num_blocks: pages.len().assert_into(),
-        file_size: RP2040_FAMILY_ID,
+        file_size: Opts::global().family_id,
     };
 
     let mut block_data: Uf2BlockData = [0; 476];
